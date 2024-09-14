@@ -1,0 +1,219 @@
+
+entity Usuarios {
+    email String required minlength(5) maxlength(100),
+    password String maxlength(200),
+    avatar String,
+    disabled Boolean,
+    accountActive Boolean,
+    blocked Boolean,
+    createdAt Instant
+}
+
+entity Postulantes {
+    salarioDeseado BigDecimal,
+    descripcionSemblanza String,
+    rangoSalarialMin BigDecimal required,
+    rangoSalarialMax BigDecimal required,
+    terminosAceptados Boolean,
+    informacionAceptadaUsuario Boolean,
+    leyArco Boolean,
+    notificacionEmailCv Boolean,
+    fechaAceptacionTerminos Instant,
+    cambiarResidencia Boolean
+}
+
+entity Empresas {
+    nombre String maxlength(100),
+    razonSocial String required maxlength(150),
+    fechaRegistro Instant
+}
+
+entity Vacantes {
+    titulo String maxlength(100),
+    descripcion TextBlob,
+    rangoSalarialMin BigDecimal required,
+    rangoSalarialMax BigDecimal required,
+    fechaPublicacion Instant,
+    fechaCierre Instant,
+    estatus Integer
+}
+
+entity EstatusVacantes {
+    nombre String
+}
+
+entity DatosPersonales {
+    nombre String required,
+    apellidoPaterno String,
+    apellidoMaterno String,
+    fechaNacimiento Instant,
+    curp String maxlength(20),
+    tipoTelefono Instant,
+    telefono BigDecimal,
+    imagen String,
+    fechaCreacion Instant
+}
+
+entity Domicilios {
+    codigoPostal String maxlength(10),
+    colonia String maxlength(150),
+    calle String maxlength(150),
+    numeroInterior String maxlength(10),
+    numeroExterior String maxlength(10),
+    referencias String
+}
+
+entity DomiciliosUsuarios {
+    estatus BigDecimal
+}
+
+entity EstatusDomicilio {
+    nombre String
+}
+
+entity EstudiosUsuarios {
+    escolaridad String,
+    cedulaProfesional String,
+    carrera String,
+    situacionEconomica String,
+    escuela String,
+    graduacion Integer
+}
+
+entity OtrosEstudios {
+    nombreCurso String,
+    instituto String,
+    documentosProbatorios Boolean,
+    nombreDocumento String
+}
+
+entity ConocimientosUsuarios {
+    nombre String,
+    experiencia String,
+    certificacion String
+}
+
+entity IdiomasUsuarios {
+    nombreIdioma String,
+    nivel String,
+    certificacion String,
+    direccionElectronicaCertificacion String
+}
+
+entity Habilidades {
+    nombre String,
+    descripcion String,
+    esHobbie Boolean
+}
+
+
+entity Experiencias {
+    empresa String,
+    puesto String,
+    salarioNetoMensual BigDecimal,
+    descripcion String,
+    fechaIngreso Instant,
+    fechaSalida Instant,
+    trabajoActual Boolean
+}
+
+entity RedesSociales {
+    plataforma String,
+    enlace String
+}
+
+entity Documentos {
+    nombre String,
+    enlaceDocumento String,
+    fechaSubida Instant,
+    esCurriculum Boolean
+}
+
+entity Postulaciones {
+    fechaPostulacion Instant,
+    estatus Integer
+}
+
+entity EstatusPostulaciones {
+    nombre String
+}
+
+entity UsuariosEmpresas {
+    idRolEmpresa Integer
+}
+
+entity JhiAuthority {
+    role Roles
+}
+
+entity RolesEmpresa {
+    nombre String
+}
+
+entity Generos {
+    nombre String
+}
+
+entity Ciudades {
+    nombre String
+}
+
+entity Estados {
+    nombre String
+}
+
+entity Paises {
+    nombre String
+}
+
+entity TiposDiscapacidades {
+    nombre String
+}
+
+entity Municipios {
+    nombre String
+}
+
+relationship OneToMany {
+    Usuarios to Postulantes{usuarios},
+    Empresas to Vacantes{empresa},
+    Postulantes to Habilidades{postulante},
+    Postulantes to Experiencias{postulante},
+    Postulantes to RedesSociales{postulante},
+    Postulantes to Documentos{postulante},
+    Postulantes to Postulaciones{postulante},
+    Empresas to UsuariosEmpresas{empresa},
+    Usuarios to UsuariosEmpresas{usuarios},
+    Postulantes to DatosPersonales{postulante},
+    Postulantes to EstudiosUsuarios{postulante},
+    Postulantes to OtrosEstudios{postulante},
+    Postulantes to ConocimientosUsuarios{postulante},
+    Postulantes to IdiomasUsuarios{postulante},
+    Domicilios to DomiciliosUsuarios{domicilio},
+    Empresas to DomiciliosUsuarios{empresa},
+    Postulantes to DomiciliosUsuarios{postulante},
+    Vacantes to EstatusVacantes{estatus},
+    DatosPersonales to Generos{idGenero},
+    DatosPersonales to Paises{idPais},
+    DatosPersonales to Estados{idEstado},
+    DatosPersonales to Ciudades{idCiudad},
+    DatosPersonales to TiposDiscapacidades{idTipoDiscapacidad},
+    DatosPersonales to Municipios{idMunicipio},
+    Domicilios to Paises{idPais},
+    Domicilios to Estados{idEstado},
+    Domicilios to Municipios{idMunicipio},
+    Domicilios to Ciudades{idCiudad},
+    DomiciliosUsuarios to EstatusDomicilio{estatus},
+    Postulaciones to EstatusPostulaciones{estatus},
+    UsuariosEmpresas to RolesEmpresa{idRolEmpresa}
+}
+
+paginate all with pagination
+
+// Use Data Transfer Objects (DTO)
+dto all with mapstruct
+//use mapstruct for *
+
+// Set service options to all except few
+service all with serviceImpl
+
